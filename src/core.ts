@@ -19,7 +19,7 @@ export const pw_core_get_registry = pipewire.func("pw_core_get_registry", koffi.
     "size_t"
 ]);
 
-export const pw_registry_events_globals = koffi.proto("void", [
+export const pw_registry_events_global = koffi.proto("void", [
     "void*", // data
     "uint32_t", // id
     "uint32_t", // permissions
@@ -28,10 +28,15 @@ export const pw_registry_events_globals = koffi.proto("void", [
     "void*" // props
 ]);
 
+export const pw_registry_events_global_remove = koffi.proto("void", [
+    "void*", // data
+    "uint32_t" // id
+]);
+
 export const pw_registry_events = koffi.struct("pw_registry_events", {
     vesion: "uint32_t",
-    global: "void*", // TODO
-    global_remove: "void*" // TODO
+    global: koffi.pointer(pw_registry_events_global),
+    global_remove: koffi.pointer(pw_registry_events_global_remove)
 });
 
 export const pw_core_disconnect = pipewire.func("pw_core_disconnect", "int", [koffi.pointer(pw_core)]);

@@ -11,29 +11,32 @@ import * as pw from "../src/index.js";
     const registry_listener = Buffer.alloc(koffi.sizeof(pw.hook.spa_hook));
 
     const registry_event_global = (
-        data: Buffer,
+        data: unknown,
         id: number,
         permissions: number,
         type: string,
         version: number,
-        props: Buffer
+        props: unknown
     ) => {
-        console.log(`object: id:${id} type:${type}/${version}`);
+        console.log(`New object: id: ${id} type: ${type} version: ${version}`);
+    };
+
+    const registry_event_global_remove = (data: unknown, id: number) => {
+        console.log(`Removed object: id: ${id}`);
     };
 
     const registry_events = {
         version: 0,
-        global: koffi.register(registry_event_global, koffi.pointer(pw.core.pw_registry_events_globals)),
-        global_remove: null
+        global: koffi.register(registry_event_global, koffi.pointer(pw.core.pw_registry_events_global)),
+        global_remove: koffi.register(
+            registry_event_global_remove,
+            koffi.pointer(pw.core.pw_registry_events_global_remove)
+        )
     };
-
     pw.registry.pw_registry_add_listener(registry, registry_listener, registry_events, null);
 
-    process.on("SIGINT", () => {
-        pw.main_loop.pw_main_loop_quit(loop);
-    });
-
     console.log("Starting PipeWire main loop...");
+    process.on("SIGINT", () => pw.main_loop.pw_main_loop_quit(loop));
     await new Promise((resolve) => pw.main_loop.pw_main_loop_run.async(loop, resolve));
 
     pw.proxy.pw_proxy_destroy(registry);
