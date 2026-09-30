@@ -26,13 +26,18 @@ import * as pw from "../src/index.js";
 
     const registry_listener = Buffer.alloc(koffi.sizeof(pw.hook.spa_hook));
     const registry_events = Buffer.alloc(koffi.sizeof(pw.core.pw_registry_events));
+    const registry_event_global_register = koffi.register(
+        registry_event_global,
+        koffi.pointer(pw.core.pw_registry_events_global)
+    );
+    const registry_event_global_remove_register = koffi.register(
+        registry_event_global_remove,
+        koffi.pointer(pw.core.pw_registry_events_global_remove)
+    );
     koffi.encode(registry_events, pw.core.pw_registry_events, {
         version: 0,
-        global: koffi.register(registry_event_global, koffi.pointer(pw.core.pw_registry_events_global)),
-        global_remove: koffi.register(
-            registry_event_global_remove,
-            koffi.pointer(pw.core.pw_registry_events_global_remove)
-        )
+        global: registry_event_global_register,
+        global_remove: registry_event_global_remove_register
     });
     pw.registry.pw_registry_add_listener(registry, registry_listener, registry_events, null);
 
@@ -41,6 +46,8 @@ import * as pw from "../src/index.js";
     await new Promise((resolve) => pw.main_loop.pw_main_loop_run.async(loop, resolve));
 
     pw.proxy.pw_proxy_destroy(registry);
+    koffi.unregister(registry_event_global_register);
+    koffi.unregister(registry_event_global_remove_register);
     pw.core.pw_core_disconnect(core);
     pw.context.pw_context_destroy(context);
     pw.main_loop.pw_main_loop_destroy(loop);
