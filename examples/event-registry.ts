@@ -8,7 +8,6 @@ import * as pw from "../src/index.js";
     const context = pw.context.pw_context_new(pw.main_loop.pw_main_loop_get_loop(loop), null, 0);
     const core = pw.core.pw_context_connect(context, null, 0);
     const registry = pw.core.pw_core_get_registry(core, 3, 0);
-    const registry_listener = Buffer.alloc(koffi.sizeof(pw.hook.spa_hook));
 
     const registry_event_global = (
         data: unknown,
@@ -25,14 +24,16 @@ import * as pw from "../src/index.js";
         console.log(`Removed object: id: ${id}`);
     };
 
-    const registry_events = {
+    const registry_listener = Buffer.alloc(koffi.sizeof(pw.hook.spa_hook));
+    const registry_events = Buffer.alloc(koffi.sizeof(pw.core.pw_registry_events));
+    koffi.encode(registry_events, pw.core.pw_registry_events, {
         version: 0,
         global: koffi.register(registry_event_global, koffi.pointer(pw.core.pw_registry_events_global)),
         global_remove: koffi.register(
             registry_event_global_remove,
             koffi.pointer(pw.core.pw_registry_events_global_remove)
         )
-    };
+    });
     pw.registry.pw_registry_add_listener(registry, registry_listener, registry_events, null);
 
     console.log("Starting PipeWire main loop...");
