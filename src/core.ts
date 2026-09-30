@@ -34,7 +34,7 @@ export const pw_registry_events_global_remove = koffi.proto("void", [
 ]);
 
 export const pw_registry_events = koffi.struct("pw_registry_events", {
-    vesion: "uint32_t",
+    version: "uint32_t",
     global: koffi.pointer(pw_registry_events_global),
     global_remove: koffi.pointer(pw_registry_events_global_remove)
 });
