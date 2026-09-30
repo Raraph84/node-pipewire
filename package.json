@@ -4,7 +4,8 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc -p tsconfig.build.json",
+    "publish": "npm run build && npm publish"
   },
   "keywords": [],
   "homepage": "https://github.com/Raraph84/node-pipewire",
@@ -28,6 +29,7 @@
         "files": [
           "package.json",
           "package-lock.json",
+          "tsconfig.build.json",
           "tsconfig.json"
         ],
         "options": {
