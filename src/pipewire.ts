@@ -1,6 +1,7 @@
 import EventEmitter from "node:events";
 import koffi from "koffi";
-import { PipewireObject, bindings as pw } from "./index.js";
+import pw from "./bindings/index.js";
+import PipewireObject from "./object.js";
 
 export default class Pipewire extends EventEmitter {
     mainLoop: unknown;
@@ -56,7 +57,14 @@ export default class Pipewire extends EventEmitter {
         props: unknown
     ): void {
         if (this.objects[id]) throw new Error(`Object with id ${id} already exists`);
-        this.objects[id] = new PipewireObject(id, permissions, type, version);
+
+        const propsDict = koffi.decode(props, pw.dict.spa_dict);
+        const propsArray = koffi.decode(propsDict.items, pw.dict.spa_dict_item, propsDict.n_items);
+
+        const propsObj: { [key: string]: string } = {};
+        for (const item of propsArray) propsObj[item.key] = item.value;
+
+        this.objects[id] = new PipewireObject(id, permissions, type, version, propsObj);
         this.emit("objectAdded", this.objects[id]);
     }
 
