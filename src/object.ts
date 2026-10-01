@@ -1,6 +1,10 @@
 import EventEmitter from "node:events";
+import type Pipewire from "./pipewire.js";
 
 export default class PipewireObject extends EventEmitter {
+    pipewire: Pipewire;
+    removed: boolean = false;
+
     id: number;
     permissions: number;
     type: string;
@@ -9,8 +13,17 @@ export default class PipewireObject extends EventEmitter {
 
     objectSerial: number;
 
-    constructor(id: number, permissions: number, type: string, version: number, props: { [key: string]: string }) {
+    constructor(
+        pipewire: Pipewire,
+        id: number,
+        permissions: number,
+        type: string,
+        version: number,
+        props: { [key: string]: string }
+    ) {
         super();
+
+        this.pipewire = pipewire;
 
         this.id = id;
         this.permissions = permissions;

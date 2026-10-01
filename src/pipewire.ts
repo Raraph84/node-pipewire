@@ -66,13 +66,14 @@ export default class Pipewire extends EventEmitter {
         for (const item of propsArray) propsObj[item.key] = item.value;
 
         if (type === "PipeWire:Interface:Node")
-            this.objects[id] = new PipewireNode(id, permissions, type, version, propsObj);
-        else this.objects[id] = new PipewireObject(id, permissions, type, version, propsObj);
+            this.objects[id] = new PipewireNode(this, id, permissions, type, version, propsObj);
+        else this.objects[id] = new PipewireObject(this, id, permissions, type, version, propsObj);
         this.emit("objectAdded", this.objects[id]);
     }
 
     registryEventGlobalRemove(_data: unknown, id: number): void {
         if (!this.objects[id]) throw new Error(`Object with id ${id} does not exist`);
+        this.objects[id].removed = true;
         this.emit("objectRemoved", this.objects[id]);
         delete this.objects[id];
     }
