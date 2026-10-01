@@ -9,6 +9,14 @@ const pipewire = koffi.load("libpipewire-0.3.so.0");
 export const PW_VERSION_NODE = 3;
 export const PW_VERSION_NODE_EVENTS = 0;
 
+export const PW_NODE_CHANGE_MASK = {
+    INPUT_PORTS: 1 << 0,
+    OUTPUT_PORTS: 1 << 1,
+    STATE: 1 << 2,
+    PROPS: 1 << 3,
+    PARAMS: 1 << 4
+};
+
 export const pw_node = koffi.opaque("pw_node");
 
 export const pw_node_state = koffi.enumeration("pw_node_state", {
@@ -18,14 +26,6 @@ export const pw_node_state = koffi.enumeration("pw_node_state", {
     PW_NODE_STATE_IDLE: 2,
     PW_NODE_STATE_RUNNING: 3
 });
-
-export const PW_NODE_CHANGE_MASK = {
-    INPUT_PORTS: 1 << 0,
-    OUTPUT_PORTS: 1 << 1,
-    STATE: 1 << 2,
-    PROPS: 1 << 3,
-    PARAMS: 1 << 4
-};
 
 export const pw_node_info = koffi.struct("pw_node_info", {
     id: "uint32_t",

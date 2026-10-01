@@ -1,9 +1,12 @@
 import koffi from "koffi";
 import type Pipewire from "./pipewire.js";
+import type { spa_param_type } from "./bindings/param.js";
 import PipewireObject from "./object.js";
 import pw from "./bindings/index.js";
 
 export default class PipewireNode extends PipewireObject {
+    static readonly spa_param_type = pw.param.spa_param_type;
+
     nodeName: string;
     factoryId: number;
 
@@ -66,6 +69,11 @@ export default class PipewireNode extends PipewireObject {
         this.nodeEvents = null;
         this.nodeListener = null;
         this.nodeProxy = null;
+    }
+
+    subscribeParams(params: spa_param_type[]) {
+        if (!this.nodeProxy) throw new Error(`Listener not attached to node ${this.id}`);
+        pw.node.pw_node_subscribe_params(this.nodeProxy, params, params.length);
     }
 
     nodeEventInfo(_data: unknown, info: unknown): void {

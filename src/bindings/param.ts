@@ -8,26 +8,26 @@ export const spa_param_info = koffi.struct("spa_param_info", {
     padding: koffi.array("uint32_t", 4)
 });
 
-export const spa_param_type = {
-    SPA_PARAM_Invalid: 0,
-    SPA_PARAM_PropInfo: 1,
-    SPA_PARAM_Props: 2,
-    SPA_PARAM_EnumFormat: 3,
-    SPA_PARAM_Format: 4,
-    SPA_PARAM_Buffers: 5,
-    SPA_PARAM_Meta: 6,
-    SPA_PARAM_IO: 7,
-    SPA_PARAM_EnumProfile: 8,
-    SPA_PARAM_Profile: 9,
-    SPA_PARAM_EnumPortConfig: 10,
-    SPA_PARAM_PortConfig: 11,
-    SPA_PARAM_EnumRoute: 12,
-    SPA_PARAM_Route: 13,
-    SPA_PARAM_Control: 14,
-    SPA_PARAM_Latency: 15,
-    SPA_PARAM_ProcessLatency: 16,
-    SPA_PARAM_Tag: 17,
-    SPA_PARAM_PeerEnumFormat: 18,
-    SPA_PARAM_Capability: 19,
-    SPA_PARAM_PeerCapability: 20
-};
+export enum spa_param_type {
+    SPA_PARAM_Invalid,
+    SPA_PARAM_PropInfo,
+    SPA_PARAM_Props,
+    SPA_PARAM_EnumFormat,
+    SPA_PARAM_Format,
+    SPA_PARAM_Buffers,
+    SPA_PARAM_Meta,
+    SPA_PARAM_IO,
+    SPA_PARAM_EnumProfile,
+    SPA_PARAM_Profile,
+    SPA_PARAM_EnumPortConfig,
+    SPA_PARAM_PortConfig,
+    SPA_PARAM_EnumRoute,
+    SPA_PARAM_Route,
+    SPA_PARAM_Control,
+    SPA_PARAM_Latency,
+    SPA_PARAM_ProcessLatency,
+    SPA_PARAM_Tag,
+    SPA_PARAM_PeerEnumFormat,
+    SPA_PARAM_Capability,
+    SPA_PARAM_PeerCapability
+}
