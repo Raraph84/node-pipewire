@@ -47,13 +47,14 @@ import * as pw from "../src/index.js";
     const interval = setInterval(() => pw.loop.pw_loop_iterate(loop, 1), 10);
     await new Promise((resolve) => process.on("SIGINT", resolve));
     clearInterval(interval);
+    pw.loop.pw_loop_leave(loop);
 
     pw.proxy.pw_proxy_destroy(registry);
     koffi.unregister(registry_event_global_register);
     koffi.unregister(registry_event_global_remove_register);
     pw.core.pw_core_disconnect(core);
     pw.context.pw_context_destroy(context);
-    pw.main_loop.pw_main_loop_destroy(loop);
+    pw.main_loop.pw_main_loop_destroy(mainLoop);
 
     console.log("PipeWire main loop exited, cleanup done.");
 })();
