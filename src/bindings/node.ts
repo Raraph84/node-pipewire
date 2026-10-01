@@ -17,9 +17,17 @@ export const PW_NODE_CHANGE_MASK = {
     PARAMS: 1 << 4
 };
 
+export enum pw_node_state {
+    PW_NODE_STATE_ERROR = -1,
+    PW_NODE_STATE_CREATING = 0,
+    PW_NODE_STATE_SUSPENDED = 1,
+    PW_NODE_STATE_IDLE = 2,
+    PW_NODE_STATE_RUNNING = 3
+}
+
 export const pw_node = koffi.opaque("pw_node");
 
-export const pw_node_state = koffi.enumeration("pw_node_state", {
+export const pw_node_state_enum = koffi.enumeration("pw_node_state", {
     PW_NODE_STATE_ERROR: -1,
     PW_NODE_STATE_CREATING: 0,
     PW_NODE_STATE_SUSPENDED: 1,
@@ -34,7 +42,7 @@ export const pw_node_info = koffi.struct("pw_node_info", {
     change_mask: "uint64_t",
     n_input_ports: "uint32_t",
     n_output_ports: "uint32_t",
-    state: pw_node_state,
+    state: pw_node_state_enum,
     error: "const char*",
     props: koffi.pointer(spa_dict),
     params: koffi.pointer(spa_param_info),
