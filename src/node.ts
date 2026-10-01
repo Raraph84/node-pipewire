@@ -72,6 +72,7 @@ export default class PipewireNode extends PipewireObject {
     }
 
     subscribeParams(params: spa_param_type[]) {
+        if (this.removed) return;
         if (!this.nodeProxy) throw new Error(`Listener not attached to node ${this.id}`);
         pw.node.pw_node_subscribe_params(this.nodeProxy, params, params.length);
     }
