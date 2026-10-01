@@ -2,6 +2,7 @@ import EventEmitter from "node:events";
 import koffi from "koffi";
 import pw from "./bindings/index.js";
 import PipewireObject from "./object.js";
+import PipewireNode from "./node.js";
 
 export default class Pipewire extends EventEmitter {
     mainLoop: unknown;
@@ -64,7 +65,9 @@ export default class Pipewire extends EventEmitter {
         const propsObj: { [key: string]: string } = {};
         for (const item of propsArray) propsObj[item.key] = item.value;
 
-        this.objects[id] = new PipewireObject(id, permissions, type, version, propsObj);
+        if (type === "PipeWire:Interface:Node")
+            this.objects[id] = new PipewireNode(id, permissions, type, version, propsObj);
+        else this.objects[id] = new PipewireObject(id, permissions, type, version, propsObj);
         this.emit("objectAdded", this.objects[id]);
     }
 
