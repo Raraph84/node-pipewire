@@ -57,6 +57,8 @@ export default class Pipewire extends EventEmitter {
         version: number,
         props: unknown
     ): void {
+        this.emit("rawObjectAdded", { id, permissions, type, version, props });
+
         if (this.objects[id]) throw new Error(`Object with id ${id} already exists`);
 
         const propsDict = koffi.decode(props, pw.dict.spa_dict);
@@ -72,8 +74,13 @@ export default class Pipewire extends EventEmitter {
     }
 
     registryEventGlobalRemove(_data: unknown, id: number): void {
+        this.emit("rawObjectRemoved", { id });
+
         if (!this.objects[id]) throw new Error(`Object with id ${id} does not exist`);
         this.objects[id].removed = true;
+
+        if (this.objects[id] instanceof PipewireNode && this.objects[id].nodeProxy) this.objects[id].detachListener();
+
         this.emit("objectRemoved", this.objects[id]);
         delete this.objects[id];
     }

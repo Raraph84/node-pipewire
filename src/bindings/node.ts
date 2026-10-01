@@ -6,6 +6,9 @@ import { spa_param_info } from "./param.js";
 
 const pipewire = koffi.load("libpipewire-0.3.so.0");
 
+export const PW_VERSION_NODE = 3;
+export const PW_VERSION_NODE_EVENTS = 0;
+
 export const pw_node = koffi.opaque("pw_node");
 
 export const pw_node_state = koffi.enumeration("pw_node_state", {
