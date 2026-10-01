@@ -4,6 +4,8 @@ import { spa_hook } from "./hook.js";
 
 const pipewire = koffi.load("libpipewire-0.3.so.0");
 
+export const PW_VERSION_REGISTRY_EVENTS = 0;
+
 export const pw_registry_add_listener = pipewire.func("pw_registry_add_listener", "int", [
     koffi.pointer(pw_registry), // registry
     koffi.pointer(spa_hook), // listener

@@ -4,19 +4,21 @@ import { pw_properties } from "./properties.js";
 
 const pipewire = koffi.load("libpipewire-0.3.so.0");
 
+export const PW_VERSION_REGISTRY = 3;
+
 export const pw_core = koffi.opaque("pw_core");
 export const pw_registry = koffi.opaque("pw_registry");
 
 export const pw_context_connect = pipewire.func("pw_context_connect", koffi.pointer(pw_core), [
-    koffi.pointer(pw_context),
-    koffi.pointer(pw_properties),
-    "size_t"
+    koffi.pointer(pw_context), // context
+    koffi.pointer(pw_properties), // properties
+    "size_t" // user_data_size
 ]);
 
 export const pw_core_get_registry = pipewire.func("pw_core_get_registry", koffi.pointer(pw_registry), [
-    koffi.pointer(pw_core),
-    "uint32_t",
-    "size_t"
+    koffi.pointer(pw_core), // core
+    "uint32_t", // version
+    "size_t" // user_data_size
 ]);
 
 export const pw_registry_events_global = koffi.proto("void", [
