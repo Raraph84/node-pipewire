@@ -21,10 +21,10 @@ npm run build
 
 ## Usage
 
-See [`examples/event-registry.ts`](examples/event-registry.ts) for a complete example:
+See [`examples/event-registry-sync.ts`](examples/event-registry-sync.ts) for a complete example:
 
 ```bash
-npx tsx examples/event-registry.ts
+npx tsx examples/event-registry-sync.ts
 ```
 
 ## License
