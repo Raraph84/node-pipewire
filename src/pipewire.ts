@@ -90,6 +90,34 @@ export default class Pipewire extends EventEmitter {
         pw.loop.pw_loop_leave(this.loop);
     }
 
+    on(event: "objectAdded", listener: (object: PipewireObject) => void): this;
+    on(event: "objectRemoved", listener: (object: PipewireObject) => void): this;
+    on(event: string | symbol, listener: (...args: any[]) => void): this;
+    on(event: string | symbol, listener: (...args: any[]) => void): this {
+        return super.on(event, listener);
+    }
+
+    once(event: "objectAdded", listener: (object: PipewireObject) => void): this;
+    once(event: "objectRemoved", listener: (object: PipewireObject) => void): this;
+    once(event: string | symbol, listener: (...args: any[]) => void): this;
+    once(event: string | symbol, listener: (...args: any[]) => void): this {
+        return super.once(event, listener);
+    }
+
+    off(event: "objectAdded", listener: (object: PipewireObject) => void): this;
+    off(event: "objectRemoved", listener: (object: PipewireObject) => void): this;
+    off(event: string | symbol, listener: (...args: any[]) => void): this;
+    off(event: string | symbol, listener: (...args: any[]) => void): this {
+        return super.off(event, listener);
+    }
+
+    emit(event: "objectAdded", object: PipewireObject): boolean;
+    emit(event: "objectRemoved", object: PipewireObject): boolean;
+    emit(event: string | symbol, ...args: any[]): boolean;
+    emit(event: string | symbol, ...args: any[]): boolean {
+        return super.emit(event, ...args);
+    }
+
     deinit(): void {
         pw.proxy.pw_proxy_destroy(this.registry);
         koffi.unregister(this.registryEventGlobalRegister);
