@@ -1,5 +1,5 @@
 import koffi from "koffi";
-import * as pw from "../src/index.js";
+import { bindings as pw } from "../src/index.js";
 
 (async () => {
     pw.pipewire.pw_init(0, null);
