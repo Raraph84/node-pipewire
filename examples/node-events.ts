@@ -6,8 +6,8 @@ pipewire.on("objectAdded", (obj) => {
     if (!(obj instanceof PipewireNode)) return;
     console.log(`Node added: id: ${obj.id} name: ${obj.nodeName}`);
 
-    obj.on("rawNodeInfo", () => {
-        console.log(`Node info for id ${obj.id}`);
+    obj.on("nodeInfo", (info) => {
+        console.log(`Node info for id ${obj.id}: ${info.changes.join(", ")}`);
     });
     obj.on("rawNodeParam", () => {
         console.log(`Node param for id ${obj.id}`);
