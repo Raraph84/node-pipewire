@@ -7,7 +7,7 @@ import { bindings as pw } from "../src/index.js";
     const loop = pw.main_loop.pw_main_loop_new(null);
     const context = pw.context.pw_context_new(pw.main_loop.pw_main_loop_get_loop(loop), null, 0);
     const core = pw.core.pw_context_connect(context, null, 0);
-    const registry = pw.core.pw_core_get_registry(core, 3, 0);
+    const registry = pw.core.pw_core_get_registry(core, pw.core.PW_VERSION_REGISTRY, 0);
 
     const registry_event_global = (
         data: unknown,
@@ -35,7 +35,7 @@ import { bindings as pw } from "../src/index.js";
         koffi.pointer(pw.core.pw_registry_events_global_remove)
     );
     koffi.encode(registry_events, pw.core.pw_registry_events, {
-        version: 0,
+        version: pw.registry.PW_VERSION_REGISTRY_EVENTS,
         global: registry_event_global_register,
         global_remove: registry_event_global_remove_register
     });

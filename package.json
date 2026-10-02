@@ -4,8 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "publish": "npm run build && npm publish"
+    "build": "tsc -p tsconfig.build.json"
   },
   "keywords": [],
   "homepage": "https://github.com/Raraph84/node-pipewire",
