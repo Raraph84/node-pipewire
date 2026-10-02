@@ -80,7 +80,7 @@ export default class PipewireNode extends PipewireObject {
     }
 
     nodeEventInfo(_data: unknown, info: unknown): void {
-        this.emit("rawNodeInfo", info);
+        this.emit("rawNodeInfo", { info });
 
         const nodeInfo = koffi.decode(info, pw.node.pw_node_info);
 
@@ -118,42 +118,46 @@ export default class PipewireNode extends PipewireObject {
         this.emit("nodeInfo", nodeInfoObj);
     }
 
-    nodeEventParam(_data: unknown, info: unknown): void {
-        this.emit("rawNodeParam", info);
+    nodeEventParam(_data: unknown, seq: number, id: number, index: number, next: number, param: unknown): void {
+        this.emit("rawNodeParam", { seq, id, index, next, param });
     }
 
     on(event: "nodeInfo", listener: (info: NodeInfo) => void): this;
-    on(event: "rawNodeInfo", listener: (info: unknown) => void): this;
-    on(event: "rawNodeParam", listener: (info: unknown) => void): this;
+    on(event: "rawNodeInfo", listener: (data: RawNodeInfo) => void): this;
+    on(event: "rawNodeParam", listener: (data: RawNodeParam) => void): this;
     on(event: string | symbol, listener: (...args: any[]) => void): this;
     on(event: string | symbol, listener: (...args: any[]) => void): this {
         return super.on(event, listener);
     }
 
     once(event: "nodeInfo", listener: (info: NodeInfo) => void): this;
-    once(event: "rawNodeInfo", listener: (info: unknown) => void): this;
-    once(event: "rawNodeParam", listener: (info: unknown) => void): this;
+    once(event: "rawNodeInfo", listener: (data: RawNodeInfo) => void): this;
+    once(event: "rawNodeParam", listener: (data: RawNodeParam) => void): this;
     once(event: string | symbol, listener: (...args: any[]) => void): this;
     once(event: string | symbol, listener: (...args: any[]) => void): this {
         return super.once(event, listener);
     }
 
     off(event: "nodeInfo", listener: (info: NodeInfo) => void): this;
-    off(event: "rawNodeInfo", listener: (info: unknown) => void): this;
-    off(event: "rawNodeParam", listener: (info: unknown) => void): this;
+    off(event: "rawNodeInfo", listener: (data: RawNodeInfo) => void): this;
+    off(event: "rawNodeParam", listener: (data: RawNodeParam) => void): this;
     off(event: string | symbol, listener: (...args: any[]) => void): this;
     off(event: string | symbol, listener: (...args: any[]) => void): this {
         return super.off(event, listener);
     }
 
     emit(event: "nodeInfo", info: NodeInfo): boolean;
-    emit(event: "rawNodeInfo", info: unknown): boolean;
-    emit(event: "rawNodeParam", info: unknown): boolean;
+    emit(event: "rawNodeInfo", data: RawNodeInfo): boolean;
+    emit(event: "rawNodeParam", data: RawNodeParam): boolean;
     emit(event: string | symbol, ...args: any[]): boolean;
     emit(event: string | symbol, ...args: any[]): boolean {
         return super.emit(event, ...args);
     }
 }
+
+export type RawNodeInfo = {
+    info: unknown;
+};
 
 export type NodeInfo = {
     id: number;
@@ -166,4 +170,12 @@ export type NodeInfo = {
     error: string | null;
     props: { [key: string]: string } | null;
     params: spa_param_type[];
+};
+
+export type RawNodeParam = {
+    seq: number;
+    id: number;
+    index: number;
+    next: number;
+    param: unknown;
 };
