@@ -121,9 +121,41 @@ export default class PipewireNode extends PipewireObject {
     nodeEventParam(_data: unknown, info: unknown): void {
         this.emit("rawNodeParam", info);
     }
+
+    on(event: "nodeInfo", listener: (info: NodeInfo) => void): this;
+    on(event: "rawNodeInfo", listener: (info: unknown) => void): this;
+    on(event: "rawNodeParam", listener: (info: unknown) => void): this;
+    on(event: string | symbol, listener: (...args: any[]) => void): this;
+    on(event: string | symbol, listener: (...args: any[]) => void): this {
+        return super.on(event, listener);
+    }
+
+    once(event: "nodeInfo", listener: (info: NodeInfo) => void): this;
+    once(event: "rawNodeInfo", listener: (info: unknown) => void): this;
+    once(event: "rawNodeParam", listener: (info: unknown) => void): this;
+    once(event: string | symbol, listener: (...args: any[]) => void): this;
+    once(event: string | symbol, listener: (...args: any[]) => void): this {
+        return super.once(event, listener);
+    }
+
+    off(event: "nodeInfo", listener: (info: NodeInfo) => void): this;
+    off(event: "rawNodeInfo", listener: (info: unknown) => void): this;
+    off(event: "rawNodeParam", listener: (info: unknown) => void): this;
+    off(event: string | symbol, listener: (...args: any[]) => void): this;
+    off(event: string | symbol, listener: (...args: any[]) => void): this {
+        return super.off(event, listener);
+    }
+
+    emit(event: "nodeInfo", info: NodeInfo): boolean;
+    emit(event: "rawNodeInfo", info: unknown): boolean;
+    emit(event: "rawNodeParam", info: unknown): boolean;
+    emit(event: string | symbol, ...args: any[]): boolean;
+    emit(event: string | symbol, ...args: any[]): boolean {
+        return super.emit(event, ...args);
+    }
 }
 
-type NodeInfo = {
+export type NodeInfo = {
     id: number;
     maxInputPorts: number;
     maxOutputPorts: number;

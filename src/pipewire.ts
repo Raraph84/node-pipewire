@@ -100,6 +100,8 @@ export default class Pipewire extends EventEmitter {
 
     on(event: "objectAdded", listener: (object: PipewireObject) => void): this;
     on(event: "objectRemoved", listener: (object: PipewireObject) => void): this;
+    on(event: "rawObjectAdded", listener: (data: RawObjectAdded) => void): this;
+    on(event: "rawObjectRemoved", listener: (data: RawObjectRemoved) => void): this;
     on(event: string | symbol, listener: (...args: any[]) => void): this;
     on(event: string | symbol, listener: (...args: any[]) => void): this {
         return super.on(event, listener);
@@ -107,6 +109,8 @@ export default class Pipewire extends EventEmitter {
 
     once(event: "objectAdded", listener: (object: PipewireObject) => void): this;
     once(event: "objectRemoved", listener: (object: PipewireObject) => void): this;
+    once(event: "rawObjectAdded", listener: (data: RawObjectAdded) => void): this;
+    once(event: "rawObjectRemoved", listener: (data: RawObjectRemoved) => void): this;
     once(event: string | symbol, listener: (...args: any[]) => void): this;
     once(event: string | symbol, listener: (...args: any[]) => void): this {
         return super.once(event, listener);
@@ -114,6 +118,8 @@ export default class Pipewire extends EventEmitter {
 
     off(event: "objectAdded", listener: (object: PipewireObject) => void): this;
     off(event: "objectRemoved", listener: (object: PipewireObject) => void): this;
+    off(event: "rawObjectAdded", listener: (data: RawObjectAdded) => void): this;
+    off(event: "rawObjectRemoved", listener: (data: RawObjectRemoved) => void): this;
     off(event: string | symbol, listener: (...args: any[]) => void): this;
     off(event: string | symbol, listener: (...args: any[]) => void): this {
         return super.off(event, listener);
@@ -121,6 +127,8 @@ export default class Pipewire extends EventEmitter {
 
     emit(event: "objectAdded", object: PipewireObject): boolean;
     emit(event: "objectRemoved", object: PipewireObject): boolean;
+    emit(event: "rawObjectAdded", data: RawObjectAdded): boolean;
+    emit(event: "rawObjectRemoved", data: RawObjectRemoved): boolean;
     emit(event: string | symbol, ...args: any[]): boolean;
     emit(event: string | symbol, ...args: any[]): boolean {
         return super.emit(event, ...args);
@@ -135,3 +143,15 @@ export default class Pipewire extends EventEmitter {
         pw.main_loop.pw_main_loop_destroy(this.mainLoop);
     }
 }
+
+export type RawObjectAdded = {
+    id: number;
+    permissions: number;
+    type: string;
+    version: number;
+    props: unknown;
+};
+
+export type RawObjectRemoved = {
+    id: number;
+};
