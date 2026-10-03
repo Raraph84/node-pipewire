@@ -41,6 +41,25 @@ export const encodePodValue = (value: PodValue): Buffer => {
         const buf = Buffer.alloc(koffi.sizeof("int32_t"));
         koffi.encode(buf, "int32_t", value.value ? 1 : 0);
         return buf;
+    } else if (value.type === pw.type.spa_type.SPA_TYPE_Int) {
+        const buf = Buffer.alloc(koffi.sizeof("int32_t"));
+        koffi.encode(buf, "int32_t", value.value);
+        return buf;
+    } else if (value.type === pw.type.spa_type.SPA_TYPE_Long) {
+        const buf = Buffer.alloc(koffi.sizeof("int64_t"));
+        koffi.encode(buf, "int64_t", value.value);
+        return buf;
+    } else if (value.type === pw.type.spa_type.SPA_TYPE_Float) {
+        const buf = Buffer.alloc(koffi.sizeof("float"));
+        koffi.encode(buf, "float", value.value);
+        return buf;
+    } else if (value.type === pw.type.spa_type.SPA_TYPE_Double) {
+        const buf = Buffer.alloc(koffi.sizeof("double"));
+        koffi.encode(buf, "double", value.value);
+        return buf;
+    } else if (value.type === pw.type.spa_type.SPA_TYPE_String) {
+        const buf = Buffer.from(value.value as string);
+        return buf;
     } else if (value.type === pw.type.spa_type.SPA_TYPE_Object) {
         const objectBody = Buffer.alloc(koffi.sizeof(pw.pod.spa_pod_object_body));
         koffi.encode(objectBody, pw.pod.spa_pod_object_body, { type: value.objectType, id: 0 });

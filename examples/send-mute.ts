@@ -10,7 +10,7 @@ pipewire.on("objectAdded", (obj) => {
             obj.setParam(PipewireNode.spa_param_type.SPA_PARAM_Props, {
                 type: spa_type.SPA_TYPE_Object,
                 objectType: 0,
-                contents: { [spa_prop.SPA_PROP_mute]: { type: spa_type.SPA_TYPE_Bool, value: false } }
+                contents: { [spa_prop.SPA_PROP_mute]: { type: spa_type.SPA_TYPE_Bool, value: true } }
             });
             setTimeout(() => pipewire.stopLoop(), 100);
         });
