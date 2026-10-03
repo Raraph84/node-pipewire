@@ -1,4 +1,4 @@
-import { Pipewire, PipewireNode } from "../src/index.js";
+import { Pipewire, PipewireNode, spa_prop } from "../src/index.js";
 
 const pipewire = new Pipewire();
 
@@ -9,8 +9,14 @@ pipewire.on("objectAdded", (obj) => {
     obj.on("nodeInfo", (info) => {
         console.log(`Node info for id ${obj.id}: ${info.changes.join(", ")}`);
     });
-    obj.on("rawNodeParam", () => {
-        console.log(`Node param for id ${obj.id}`);
+    obj.on("nodeParam", (param) => {
+        const name = PipewireNode.spa_param_type[param.type];
+        console.log(`Node param for id ${obj.id}: ${name}`);
+
+        if (param.type === PipewireNode.spa_param_type.SPA_PARAM_Props) {
+            const mute = param.value.contents![spa_prop.SPA_PROP_mute];
+            if (mute) console.log(` Mute: ${mute.value}`);
+        }
     });
 
     setImmediate(() => {
