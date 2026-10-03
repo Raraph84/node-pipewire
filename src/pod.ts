@@ -36,9 +36,45 @@ export const parsePodValue = (type: spa_type, body: unknown, offset: number, siz
     return { type };
 };
 
+export const encodePodValue = (value: PodValue): Buffer => {
+    if (value.type === pw.type.spa_type.SPA_TYPE_Bool) {
+        const buf = Buffer.alloc(koffi.sizeof("int32_t"));
+        koffi.encode(buf, "int32_t", value.value ? 1 : 0);
+        return buf;
+    } else if (value.type === pw.type.spa_type.SPA_TYPE_Object) {
+        const objectBody = Buffer.alloc(koffi.sizeof(pw.pod.spa_pod_object_body));
+        koffi.encode(objectBody, pw.pod.spa_pod_object_body, { type: value.objectType, id: 0 });
+
+        const contents = [];
+        for (const [propKey, propVal] of Object.entries(value.contents!)) {
+            const encodedVal = encodePodValue(propVal);
+
+            const alignedVal = Buffer.alloc(align8(encodedVal.length));
+            encodedVal.copy(alignedVal);
+
+            const prop = Buffer.alloc(koffi.sizeof(pw.pod.spa_pod_prop));
+            koffi.encode(prop, pw.pod.spa_pod_prop, {
+                key: Number(propKey),
+                flags: 0,
+                value: { size: encodedVal.length, type: propVal.type }
+            });
+            contents.push(Buffer.concat([prop, alignedVal]));
+        }
+
+        return Buffer.concat([objectBody, ...contents]);
+    } else throw new Error("Unsupported pod type");
+};
+
 export const parsePod = (ptr: unknown): PodValue => {
     const pod = koffi.decode(ptr, pw.pod.spa_pod);
     return parsePodValue(pod.type, ptr, koffi.sizeof(pw.pod.spa_pod), pod.size);
+};
+
+export const encodePod = (value: PodValue): unknown => {
+    const val = encodePodValue(value);
+    const pod = Buffer.alloc(koffi.sizeof(pw.pod.spa_pod));
+    koffi.encode(pod, pw.pod.spa_pod, { type: value.type, size: val.length });
+    return Buffer.concat([pod, val]);
 };
 
 const align8 = (n: number) => (n + 7) & ~7;

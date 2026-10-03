@@ -11,7 +11,7 @@ export default class Pipewire extends EventEmitter {
     core: unknown;
     registry: unknown;
 
-    registry_listener: Buffer;
+    registryListener: Buffer;
     registryEvents: Buffer;
     registryEventGlobalRegister: bigint;
     registryEventGlobalRemoveRegister: bigint;
@@ -31,7 +31,7 @@ export default class Pipewire extends EventEmitter {
         this.core = pw.core.pw_context_connect(this.context, null, 0);
         this.registry = pw.core.pw_core_get_registry(this.core, pw.core.PW_VERSION_REGISTRY, 0);
 
-        this.registry_listener = Buffer.alloc(koffi.sizeof(pw.hook.spa_hook));
+        this.registryListener = Buffer.alloc(koffi.sizeof(pw.hook.spa_hook));
         this.registryEvents = Buffer.alloc(koffi.sizeof(pw.core.pw_registry_events));
         this.registryEventGlobalRegister = koffi.register(
             this.registryEventGlobal.bind(this),
@@ -46,7 +46,7 @@ export default class Pipewire extends EventEmitter {
             global: this.registryEventGlobalRegister,
             global_remove: this.registryEventGlobalRemoveRegister
         });
-        pw.registry.pw_registry_add_listener(this.registry, this.registry_listener, this.registryEvents, null);
+        pw.registry.pw_registry_add_listener(this.registry, this.registryListener, this.registryEvents, null);
     }
 
     registryEventGlobal(

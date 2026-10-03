@@ -2,7 +2,7 @@ import koffi from "koffi";
 import type Pipewire from "./pipewire.js";
 import type { pw_node_state } from "./bindings/node.js";
 import type { spa_param_type } from "./bindings/param.js";
-import { type PodValue, parsePod } from "./pod.js";
+import { type PodValue, encodePod, parsePod } from "./pod.js";
 import PipewireObject from "./object.js";
 import pw from "./bindings/index.js";
 
@@ -72,6 +72,18 @@ export default class PipewireNode extends PipewireObject {
         this.nodeEvents = null;
         this.nodeListener = null;
         this.nodeProxy = null;
+    }
+
+    setParam(param: spa_param_type, value: PodValue) {
+        const nodeProxy = pw.registry.pw_registry_bind(
+            this.pipewire.registry,
+            this.id,
+            this.type,
+            pw.node.PW_VERSION_NODE,
+            0
+        );
+        pw.node.pw_node_set_param(nodeProxy, param, 0, encodePod(value));
+        pw.proxy.pw_proxy_destroy(nodeProxy);
     }
 
     subscribeParams(params: spa_param_type[]) {

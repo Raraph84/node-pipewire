@@ -90,3 +90,10 @@ export const pw_node_subscribe_params = pipewire.func("pw_node_subscribe_params"
     "uint32_t*", // ids
     "uint32_t" // n_ids
 ]);
+
+export const pw_node_set_param = pipewire.func("pw_node_set_param", "int", [
+    koffi.pointer(pw_node), // object
+    "uint32_t", // id
+    "uint32_t", // flags
+    koffi.pointer(spa_pod) // param
+]);
