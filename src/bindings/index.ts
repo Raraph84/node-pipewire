@@ -12,5 +12,22 @@ import * as props from "./props.js";
 import * as proxy from "./proxy.js";
 import * as registry from "./registry.js";
 import * as thread_loop from "./thread-loop.js";
+import * as type from "./type.js";
 
-export default { context, core, dict, hook, loop, main_loop, node, param, pod, props, pipewire, proxy, registry, thread_loop };
+export default {
+    context,
+    core,
+    dict,
+    hook,
+    loop,
+    main_loop,
+    node,
+    param,
+    pod,
+    props,
+    pipewire,
+    proxy,
+    registry,
+    thread_loop,
+    type
+};

@@ -2,6 +2,7 @@ import koffi from "koffi";
 import type Pipewire from "./pipewire.js";
 import type { pw_node_state } from "./bindings/node.js";
 import type { spa_param_type } from "./bindings/param.js";
+import { type PodValue, parsePod } from "./pod.js";
 import PipewireObject from "./object.js";
 import pw from "./bindings/index.js";
 
@@ -110,7 +111,7 @@ export default class PipewireNode extends PipewireObject {
             inputPortsCount: nodeInfo.n_input_ports,
             outputPortsCount: nodeInfo.n_output_ports,
             state: nodeInfo.state as pw_node_state,
-            error: nodeInfo.error ? koffi.decode(nodeInfo.error, "string") : null,
+            error: nodeInfo.error,
             props: propsObj,
             params: paramsObj
         };
@@ -120,9 +121,17 @@ export default class PipewireNode extends PipewireObject {
 
     nodeEventParam(_data: unknown, seq: number, id: number, index: number, next: number, param: unknown): void {
         this.emit("rawNodeParam", { seq, id, index, next, param });
+
+        const nodeParamObj: NodeParam = {
+            type: id as spa_param_type,
+            value: parsePod(param)
+        };
+
+        this.emit("nodeParam", nodeParamObj);
     }
 
     on(event: "nodeInfo", listener: (info: NodeInfo) => void): this;
+    on(event: "nodeParam", listener: (param: NodeParam) => void): this;
     on(event: "rawNodeInfo", listener: (data: RawNodeInfo) => void): this;
     on(event: "rawNodeParam", listener: (data: RawNodeParam) => void): this;
     on(event: string | symbol, listener: (...args: any[]) => void): this;
@@ -131,6 +140,7 @@ export default class PipewireNode extends PipewireObject {
     }
 
     once(event: "nodeInfo", listener: (info: NodeInfo) => void): this;
+    once(event: "nodeParam", listener: (param: NodeParam) => void): this;
     once(event: "rawNodeInfo", listener: (data: RawNodeInfo) => void): this;
     once(event: "rawNodeParam", listener: (data: RawNodeParam) => void): this;
     once(event: string | symbol, listener: (...args: any[]) => void): this;
@@ -139,6 +149,7 @@ export default class PipewireNode extends PipewireObject {
     }
 
     off(event: "nodeInfo", listener: (info: NodeInfo) => void): this;
+    off(event: "nodeParam", listener: (param: NodeParam) => void): this;
     off(event: "rawNodeInfo", listener: (data: RawNodeInfo) => void): this;
     off(event: "rawNodeParam", listener: (data: RawNodeParam) => void): this;
     off(event: string | symbol, listener: (...args: any[]) => void): this;
@@ -147,6 +158,7 @@ export default class PipewireNode extends PipewireObject {
     }
 
     emit(event: "nodeInfo", info: NodeInfo): boolean;
+    emit(event: "nodeParam", param: NodeParam): boolean;
     emit(event: "rawNodeInfo", data: RawNodeInfo): boolean;
     emit(event: "rawNodeParam", data: RawNodeParam): boolean;
     emit(event: string | symbol, ...args: any[]): boolean;
@@ -178,4 +190,9 @@ export type RawNodeParam = {
     index: number;
     next: number;
     param: unknown;
+};
+
+export type NodeParam = {
+    type: spa_param_type;
+    value: PodValue;
 };
