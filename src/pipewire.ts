@@ -3,6 +3,7 @@ import koffi from "koffi";
 import pw from "./bindings/index.js";
 import PipewireObject from "./object.js";
 import PipewireNode from "./node.js";
+import { encodeDict } from "./dict.js";
 
 export default class Pipewire extends EventEmitter {
     mainLoop: unknown;
@@ -96,6 +97,17 @@ export default class Pipewire extends EventEmitter {
         clearInterval(this.loopInterval);
         this.loopInterval = null;
         pw.loop.pw_loop_leave(this.loop);
+    }
+
+    createNode(props: { [key: string]: string }): void {
+        pw.core.pw_core_create_object(
+            this.core,
+            "adapter",
+            pw.node.PW_TYPE_INTERFACE_Node,
+            pw.node.PW_VERSION_NODE,
+            encodeDict(props),
+            0
+        );
     }
 
     on(event: "objectAdded", listener: (object: PipewireObject) => void): this;

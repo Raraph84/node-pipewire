@@ -8,6 +8,7 @@ const pipewire = koffi.load("libpipewire-0.3.so.0");
 
 export const PW_VERSION_NODE = 3;
 export const PW_VERSION_NODE_EVENTS = 0;
+export const PW_TYPE_INTERFACE_Node = "PipeWire:Interface:Node";
 
 export const PW_NODE_CHANGE_MASK = {
     INPUT_PORTS: 1 << 0,
