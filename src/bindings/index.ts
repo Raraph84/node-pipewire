@@ -2,6 +2,7 @@ import * as context from "./context.js";
 import * as core from "./core.js";
 import * as dict from "./dict.js";
 import * as hook from "./hook.js";
+import * as link from "./link.js";
 import * as loop from "./loop.js";
 import * as main_loop from "./main-loop.js";
 import * as node from "./node.js";
@@ -19,6 +20,7 @@ export default {
     core,
     dict,
     hook,
+    link,
     loop,
     main_loop,
     node,

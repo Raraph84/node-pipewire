@@ -113,6 +113,21 @@ export default class Pipewire extends EventEmitter {
         );
     }
 
+    createLink(inputPort: number, outputPort: number, props: { [key: string]: string } = {}): void {
+        pw.core.pw_core_create_object(
+            this.core,
+            "link-factory",
+            pw.link.PW_TYPE_INTERFACE_Link,
+            pw.link.PW_VERSION_LINK,
+            encodeDict({
+                "link.input.port": inputPort.toString(),
+                "link.output.port": outputPort.toString(),
+                ...props
+            }),
+            0
+        );
+    }
+
     on(event: "objectAdded", listener: (object: PipewireObject) => void): this;
     on(event: "objectRemoved", listener: (object: PipewireObject) => void): this;
     on(event: "rawObjectAdded", listener: (data: RawObjectAdded) => void): this;
