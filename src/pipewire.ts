@@ -3,6 +3,7 @@ import koffi from "koffi";
 import pw from "./bindings/index.js";
 import PipewireObject from "./object.js";
 import PipewireNode from "./node.js";
+import PipewirePort from "./port.js";
 import { encodeDict } from "./dict.js";
 
 export default class Pipewire extends EventEmitter {
@@ -70,6 +71,8 @@ export default class Pipewire extends EventEmitter {
 
         if (type === "PipeWire:Interface:Node")
             this.objects[id] = new PipewireNode(this, id, permissions, type, version, propsObj);
+        else if (type === "PipeWire:Interface:Port")
+            this.objects[id] = new PipewirePort(this, id, permissions, type, version, propsObj);
         else this.objects[id] = new PipewireObject(this, id, permissions, type, version, propsObj);
         this.emit("objectAdded", this.objects[id]);
     }
