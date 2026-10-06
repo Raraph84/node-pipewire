@@ -13,22 +13,22 @@ pipewire.on("objectAdded", (obj) => {
 
     const ports = Object.values(pipewire.objects).filter((o) => o instanceof PipewirePort);
     const leftSinkPort = ports.find(
-        (p) => p.nodeId === sinkNode.id && p.portDirection === "in" && p.props["audio.channel"] === "FL"
+        (p) => p.nodeId === sinkNode.id && p.portDirection === "out" && p.props["audio.channel"] === "FL"
     );
     const rightSinkPort = ports.find(
-        (p) => p.nodeId === sinkNode.id && p.portDirection === "in" && p.props["audio.channel"] === "FR"
+        (p) => p.nodeId === sinkNode.id && p.portDirection === "out" && p.props["audio.channel"] === "FR"
     );
     const leftSourcePort = ports.find(
-        (p) => p.nodeId === sourceNode.id && p.portDirection === "out" && p.props["audio.channel"] === "FL"
+        (p) => p.nodeId === sourceNode.id && p.portDirection === "in" && p.props["audio.channel"] === "FL"
     );
     const rightSourcePort = ports.find(
-        (p) => p.nodeId === sourceNode.id && p.portDirection === "out" && p.props["audio.channel"] === "FR"
+        (p) => p.nodeId === sourceNode.id && p.portDirection === "in" && p.props["audio.channel"] === "FR"
     );
     if (!leftSinkPort || !rightSinkPort || !leftSourcePort || !rightSourcePort) return;
 
     linked = true;
-    pipewire.createLink(leftSinkPort.id, leftSourcePort.id);
-    pipewire.createLink(rightSinkPort.id, rightSourcePort.id);
+    pipewire.createLink(leftSourcePort.id, leftSinkPort.id);
+    pipewire.createLink(rightSourcePort.id, rightSinkPort.id);
     console.log("Linked virtual source to virtual sink");
 });
 
