@@ -20,3 +20,8 @@ export const pw_registry_bind = pipewire.func("pw_registry_bind", koffi.pointer(
     "uint32_t", // version
     "size_t" // user_data_size
 ]);
+
+export const pw_registry_destroy = pipewire.func("pw_registry_destroy", "int", [
+    koffi.pointer(pw_registry), // registry
+    "uint32_t" // id
+]);

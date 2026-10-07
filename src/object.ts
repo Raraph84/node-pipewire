@@ -1,5 +1,6 @@
 import EventEmitter from "node:events";
 import type Pipewire from "./pipewire.js";
+import pw from "./bindings/index.js";
 
 export default class PipewireObject extends EventEmitter {
     pipewire: Pipewire;
@@ -32,5 +33,9 @@ export default class PipewireObject extends EventEmitter {
         this.props = props;
 
         this.objectSerial = Number(props["object.serial"]);
+    }
+
+    destroy(): void {
+        pw.registry.pw_registry_destroy(this.pipewire.registry, this.id);
     }
 }
