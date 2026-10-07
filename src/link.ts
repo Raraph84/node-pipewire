@@ -23,6 +23,5 @@ export default class PipewireLink extends PipewireObject {
         this.inputPort = Number(props["link.input.port"]);
         this.outputNode = Number(props["link.output.node"]);
         this.inputNode = Number(props["link.input.node"]);
-        console.log(this.factoryId, this.outputPort, this.inputPort, this.outputNode, this.inputNode);
     }
 }
